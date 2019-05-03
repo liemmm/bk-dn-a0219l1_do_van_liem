@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+<h2>Create Blog</h2>
+<h2><a href="/blog"> Return to Blog list</a></h2>
+<form th:action="@{/create-blog}" method="post" th:object="${blog}">
+    <table>
+        <tr>
+            <td>Title</td>
+            <td><input th:field="*{title}" type="text"/></td>
+        </tr>
+        <tr>
+            <td>Author</td>
+            <td>
+                <select th:field="*{author}">
+                    <option th:each="a : ${author}" th:value="${a.id}" th:text="${a.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Create new Blog"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
