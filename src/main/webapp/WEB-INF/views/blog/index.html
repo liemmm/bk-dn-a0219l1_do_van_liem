@@ -27,6 +27,13 @@
             <td th:text="${blog.id}"></td>
             <td th:text="${blog.title}"></td>
             <td th:text="${blog.author.name}"></td>
+
+            <th:block th:if="${blog.author}">
+                <td th:text="${blog.author.name}"></td>
+            </th:block>
+            <th:block th:unless="${blog.author}">
+                <td th:text="${null}"></td>
+            </th:block>
             <td><a th:href="@{/edit-blog/__${blog.id}__}">edit</a></td>
             <td><a th:href="@{/delete-blog/__${blog.id}__}">delete</a></td>
             <td>delete</td>
