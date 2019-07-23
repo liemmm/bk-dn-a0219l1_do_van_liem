@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/head"></th:block>
+    <link rel="stylesheet" th:href="@{/css/comments.css}">
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<br/>
+    <div class="container-fluid" th:object="${imageLaughViewModel}">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card mx-auto img-fluid text-center">
+                    <div class="card-block">
+                        <h2 class="card-text" th:text="*{description}"></h2>
+                    </div>
+                    <img th:src="*{imageUrl}" class="card" >
+                    <div>
+                        <br>
+                        <a id="showCommentInputButton" href="#" class="btn btn-secondary"><i class="fa fa-comment"></i></a>
+                        <br>
+                    </div>
+                </div>
+                <br/>
+                <div id="addCommentInput" class="text-center">
+                    <div class="input-group">
+                        <textarea id="textAreaInput" class="form-control" rows="3" placeholder="Enter your comment here..." style="resize: none;"></textarea>
+                    </div>
+                    <br/>
+                    <input type="hidden" id="imageModelId" th:value="*{id}">
+                    <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <a id="addCommentButton" href="#" class="btn btn-secondary">Comment</a>
+                    <a id="hideCommentButton" href="#" class="btn btn-secondary">Cancel</a>
+                </div>
+                <br/>
+                <div id="commentSection">
+                    <div class="panel panel-white post" th:each="comment : ${imageLaughViewModel.comments}">
+                        <div class="post-heading">
+                            <div class="pull-left meta">
+                                <div class="title h5">
+                                    <p th:text="${comment.user.username}"></p>
+                                </div>
+                                <p class="text-muted time" th:text="${#dates.format(comment.commentedDate, 'yyyy/MM/dd HH:mm')}"></p>
+                            </div>
+                        </div>
+                        <div class="post-description">
+                            <h6 th:text="${comment.text}"></h6>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+<script th:src="@{/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        hideAddCommentInputs();
+        $('#showCommentInputButton').click(showAddCommentInputs);
+        $('#addCommentButton').click(addComment);
+        $('#hideCommentButton').click(hideAddCommentInputs);
+    });
+
+    function addComment() {
+        var comment = {};
+        comment.text = $('#textAreaInput').val();
+        comment.idOfImage = $('#imageModelId').val();
+
+        var csrfData = $('#csrf').val();
+
+        $.ajax({
+            type: 'POST',
+            beforeSend: function(request) {
+                request.setRequestHeader('X-CSRF-TOKEN', csrfData);
+            },
+            url: '/comment/add',
+            data: JSON.stringify(comment),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (comment) {
+                addCommentDOM(comment);
+            }
+        });
+    }
+
+    function addCommentDOM(comment) {
+        let text = comment.text;
+        let user = comment.user.username;
+        let commentedDate = formatDate(comment.commentedDate);
+        $('#commentSection')
+            .append($('<div></div>')
+                .addClass('panel panel-white post')
+                .append($('<div></div>')
+                    .addClass('post-heading')
+                    .append($('<div></div>')
+                        .addClass('pull-left meta')
+                        .append($('<div></div>')
+                            .addClass('title h5')
+                            .append($('<p></p>'))
+                            .text(user))
+                        .append($('<p></p>')
+                            .addClass('text-muted time')
+                            .text(commentedDate))))
+                .append($('<div></div>')
+                    .addClass('post-description')
+                    .text(text)));
+
+        hideAddCommentInputs();
+    }
+
+    function formatDate(dateInNumber) {
+        let date = new Date(dateInNumber);
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        let hours = date.getHours();
+        let minutes = date.getMinutes()
+        return year + '/' + month + '/' + day + ' ' + hours + ':' + minutes;
+    }
+
+    function showAddCommentInputs() {
+        $('#addCommentInput').show();
+    }
+
+    function hideAddCommentInputs() {
+        $('#addCommentInput').hide();
+    }
+
+</script>
+</body>
+</html>

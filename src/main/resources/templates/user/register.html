@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/head"></th:block>
+</head>
+<body>
+    <th:block th:replace="fragments/navbar"></th:block>
+    <br/>
+    <div class="container">
+        <h1>Register Page</h1>
+        <form th:replace="~{fragments/user-register-edit-form :: register-edit-form (type = 'register')}"></form>
+    </div>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

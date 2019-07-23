@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/head"></th:block>
+</head>
+<th:block th:replace="fragments/navbar"></th:block>
+<body>
+<br/>
+<div class="container">
+    <div class="jumbotron">
+        <h1>Upload Image</h1>
+        <br/>
+        <form method="post" enctype="multipart/form-data" th:object="${uploadImageFileBindingModel}">
+            <div class="form-group">
+                <label for="category">Example select</label>
+                <select class="form-control" id="category" th:field="*{categoryId}">
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                </select>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('description')} ? 'has-danger'">
+                <label th:for=description>Describe your post...</label>
+                <textarea class="form-control" rows="3" th:field="*{description}" style="resize: none;"></textarea>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('*')} ? 'has-danger'">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file" name="file">
+                    <span class="custom-file-control"></span>
+                </div>
+                <div th:if="${#fields.hasErrors('*')}">
+                    <div class="form-control-feedback" th:each="err : ${#fields.errors('*')}" th:text="${err}">
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input type="submit" class="btn btn-primary align-middle" value="Upload">
+        </form>
+    </div>
+</div>
+<script th:src="@{/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

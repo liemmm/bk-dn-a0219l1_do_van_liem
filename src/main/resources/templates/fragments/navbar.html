@@ -1,0 +1,71 @@
+<th:block th:fragment="navbar">
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse" th:fragment="navbar">
+
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">
+            <img th:src="@{/logo/logo.png}" height="40" alt="lmfao logo">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN')">
+                    <a class="nav-link" href="/admin/users">Users</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN')">
+                    <a class="nav-link" href="/admin/categories">Manage Categories</a>
+                </li>
+
+            </ul>
+
+            <ul class="nav navbar-nav">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link btn btn-primary btn-outline-secondary mx-2" href="/edit">Edit Account</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <!--<a class="nav-link btn btn-primary btn-outline-secondary mx-2" href="/image/upload">Upload <i class="fa fa-upload"></i></a>-->
+                    <button type="button" class="btn btn-primary btn-outline-secondary mx-2" data-toggle="modal" data-target="#uploadModal" onclick="">
+                        Upload <i class="fa fa-upload"></i>
+                    </button>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link btn btn-primary btn-outline-secondary mx-2" href="/register">Register</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link btn btn-primary btn-outline-secondary mx-2" href="/login">Login</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/logout" th:text="|Logout (${#authentication.getName()})|">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="modal fade bd-example-modal-lg" id="uploadModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">How do you want to upload image?</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <a class="btn btn-danger btn-lg" href="/image/upload-file">
+                        <i class="fa fa-upload fa-lg"></i> Through file
+                    </a>
+                    <br/>
+                    <hr/>
+                    <br/>
+                    <a class="btn btn-success btn-lg" href="/image/upload-url">
+                        <i class="fa fa-picture-o fa-lg"></i> Through url
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>

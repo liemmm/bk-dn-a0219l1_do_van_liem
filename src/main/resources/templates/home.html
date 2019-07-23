@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/navbar"></th:block>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 offset-lg-1">
+            <br>
+            <p class="font-weight-bold">CATEGORIES</p>
+            <div class="list-group">
+                <a onClick="changeSelectedCategory(this, 'all')" class="list-group-item list-group-item-action justify-content-between">
+                    All
+                </a>
+                <th:block th:each="category : ${categories}">
+                <a th:onclick="'changeSelectedCategory(this, \'' + ${category.id} + '\')'" class="list-group-item list-group-item-action justify-content-between" th:text="${category.name}">
+                </a>
+                </th:block>
+            </div>
+        </div>
+        <div id="mainBar" class="col-lg-6 offset-lg-1">
+        </div>
+    </div>
+</div>
+<script th:src="@{/jquery/jquery.min.js}"></script>
+<script th:src="@{/scripts/home-mainbar.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
